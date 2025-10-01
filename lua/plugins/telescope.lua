@@ -11,5 +11,11 @@ return {
 
 	-- General [F]ind
 	vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+	vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Telescope keymap' })
+	vim.keymap.set('n', '<leader>fc', function ()
+	    builtin.find_files({
+		cwd = vim.fn.stdpath('config')
+	    })
+	end, { desc = 'Telescope find config files' })
     end
 }
