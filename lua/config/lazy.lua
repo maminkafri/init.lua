@@ -24,7 +24,7 @@ vim.g.maplocalleader = "\\"
 vim.opt.number = true
 vim.opt.relativenumber = true
 
-vim.opt.softtabstop = 4
+vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 
 vim.opt.undofile = true
@@ -33,6 +33,11 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
 vim.opt.signcolumn = "yes"
+
+vim.opt.cursorline = false
+vim.api.nvim_set_hl(0, 'CursorLine', { underline = true, fg = 'NONE', bg = 'NONE' })
+
+vim.opt.guicursor = ""
 
 vim.keymap.set('n', '<leader>x', ':.lua<cr>')
 vim.keymap.set('v', '<leader>x', ':.lua<cr>')
@@ -77,6 +82,23 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
 	vim.lsp.enable('clangd')
     end
 })
+
+vim.api.nvim_create_autocmd('BufWritePost', {
+    desc = 'Format python code',
+    pattern = {'*.py'},
+    group = vim.api.nvim_create_augroup('format-python', { clear = true }),
+    callback = function ()
+	local fileName = vim.api.nvim_buf_get_name(0)
+        vim.cmd(":silent !black --preview -q " .. fileName)
+    end
+})
+
+function NoBackground()
+    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+    -- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
+    -- vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
+end
 
 -- Setup lazy.nvim
 require("lazy").setup({
